@@ -1,4 +1,7 @@
 import os
+from dotenv import load_dotenv  # ✅ New: loads .env
+load_dotenv()
+
 import subprocess
 import json
 from flask import Flask, render_template_string, request, jsonify, redirect, url_for
@@ -12,15 +15,15 @@ from firestore_utils import (
 app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "apni-holidays-secret-key-2025")
 
-# Firebase configuration
+# ✅ Firebase configuration via .env
 FIREBASE_CONFIG = {
-    "apiKey": "AIzaSyB7zLH0iNo3WpstGhEinI9aHLxXW4NjrWE",
-    "authDomain": "apni-holidays-prod.firebaseapp.com",
-    "projectId": "apni-holidays-prod",
-    "storageBucket": "apni-holidays-prod.firebasestorage.app",
-    "messagingSenderId": "891518085324",
-    "appId": "1:891518085324:web:a3d93907aa8f13d7857a69",
-    "measurementId": "G-T093Q3ZJ4Z"
+    "apiKey": os.environ.get("FIREBASE_API_KEY"),
+    "authDomain": os.environ.get("FIREBASE_AUTH_DOMAIN"),
+    "projectId": os.environ.get("FIREBASE_PROJECT_ID"),
+    "storageBucket": os.environ.get("FIREBASE_STORAGE_BUCKET"),
+    "messagingSenderId": os.environ.get("FIREBASE_SENDER_ID"),
+    "appId": os.environ.get("FIREBASE_APP_ID"),
+    "measurementId": os.environ.get("FIREBASE_MEASUREMENT_ID")
 }
 
 # Database is now handled by Firestore
