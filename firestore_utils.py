@@ -48,17 +48,6 @@ def init_firestore():
         db = Mock()
         db._is_mock = True
         return db
-        else:
-            print("No Firebase credentials found, using mock data")
-            raise Exception("No Firebase credentials available")
-    except Exception as e:
-        print(f"Firestore connection failed: {e}")
-        # For development, fall back to mock data
-        print("Using mock data for development")
-        from unittest.mock import Mock
-        db = Mock()
-        db._is_mock = True  # Mark as mock for easier detection
-        return db
 
 def get_packages(featured_only=False, status='active'):
     """Get packages from Firestore or mock data fallback"""
