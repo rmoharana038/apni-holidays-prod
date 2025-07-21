@@ -56,18 +56,6 @@ apniholidays.com/
 └── static/               # CSS, JS, and image assets
 ```
 
-## 🔑 Default Login Credentials
-
-**Admin Accounts**:
-- `rajesh4telecom@gmail.com` / `Rajesh@123`
-- `admin@apniholidays.com` / `Rajesh@123` 
-- `rkm.ytw1@gmail.com` / `Rajesh@123`
-
-**User Accounts**:
-- `rkm.ytw2@gmail.com` / `Rajesh@123`
-- `rkm.ytw3@gmail.com` / `Rajesh@123`
-- `rkm.ytw4@gmail.com` / `Rajesh@123`
-
 ## 🌟 Features Included
 
 ✅ **Complete Travel Package System**
