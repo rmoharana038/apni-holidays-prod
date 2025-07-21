@@ -13,33 +13,41 @@ from werkzeug.security import check_password_hash, generate_password_hash
 db = None
 
 def init_firestore():
-    """Initialize Firestore client with mock data fallback"""
+    """Initialize Firestore client with environment variables"""
     global db
     if db is not None:
         return db
-    
+
     try:
-        # Check for Firebase credentials first
-        if os.environ.get('GOOGLE_APPLICATION_CREDENTIALS') or os.path.exists('firebase-key.json'):
-            if not firebase_admin._apps:
-                # Try to initialize Firebase with service account or Application Default Credentials
-                try:
-                    if os.path.exists('firebase-key.json'):
-                        cred = credentials.Certificate('firebase-key.json')
-                    else:
-                        cred = credentials.ApplicationDefault()
-                    firebase_admin.initialize_app(cred, {
-                        'projectId': 'apni-holidays-prod'
-                    })
-                except Exception as cred_error:
-                    print(f"Firebase credential initialization failed: {cred_error}")
-                    raise Exception("No valid Firebase credentials")
-            
-            db = firestore.client()
-            # Test connection
-            db.collection('test').limit(1).get()
-            print("Successfully connected to Firestore")
-            return db
+        if not firebase_admin._apps:
+            cred = credentials.Certificate({
+                "type": "service_account",
+                "project_id": os.getenv("FIREBASE_PROJECT_ID"),
+                "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID"),
+                "private_key": os.getenv("FIREBASE_PRIVATE_KEY").replace("\\n", "\n"),
+                "client_email": os.getenv("FIREBASE_CLIENT_EMAIL"),
+                "client_id": os.getenv("FIREBASE_CLIENT_ID"),
+                "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+                "token_uri": "https://oauth2.googleapis.com/token",
+                "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+                "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_CERT_URL")
+            })
+            firebase_admin.initialize_app(cred, {
+                'projectId': os.getenv("FIREBASE_PROJECT_ID")
+            })
+
+        db = firestore.client()
+        db.collection('test').limit(1).get()  # test query
+        print("✅ Successfully connected to Firestore via environment variables")
+        return db
+
+    except Exception as e:
+        print(f"⚠️ Firestore connection failed: {e}")
+        print("🧪 Using mock Firestore for development/testing")
+        from unittest.mock import Mock
+        db = Mock()
+        db._is_mock = True
+        return db
         else:
             print("No Firebase credentials found, using mock data")
             raise Exception("No Firebase credentials available")
