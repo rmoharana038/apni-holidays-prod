@@ -1,3 +1,4 @@
+<?php
 $serviceAccount = [
   'type' => 'service_account',
   'project_id' => getenv('FIREBASE_PROJECT_ID'),
