@@ -1,5 +1,27 @@
-# Ignore environment and credential files
+# Environment files
 .env
-*.env
+.env.*
+.env.local
+
+# Firebase keys
 firebase-key.json
-*.json
+*.key.json
+
+# Vendor dependencies
+/vendor
+
+# Node assets (if using mix, Vue, etc.)
+/node_modules
+/public/hot
+/public/storage
+/storage/*.key
+
+# Logs and debug
+/storage/logs
+/storage/framework/cache
+/storage/framework/sessions
+/storage/framework/views
+
+# IDE/editor configs
+.idea/
+.vscode/
